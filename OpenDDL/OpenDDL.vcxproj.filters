@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="Code\TSArray.h" />
+    <ClInclude Include="Code\TSData.h" />
+    <ClInclude Include="Code\TSList.h" />
+    <ClInclude Include="Code\TSMap.h" />
+    <ClInclude Include="Code\TSOpenDDL.h" />
+    <ClInclude Include="Code\TSPlatform.h" />
+    <ClInclude Include="Code\TSBasic.h" />
+    <ClInclude Include="Code\TSString.h" />
+    <ClInclude Include="Code\TSText.h" />
+    <ClInclude Include="Code\TSMath.h" />
+    <ClInclude Include="Code\TSSimd.h" />
+    <ClInclude Include="Code\TSHalf.h" />
+    <ClInclude Include="Code\TSTree.h" />
+    <ClInclude Include="Code\TSTools.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Code\TSData.cpp" />
+    <ClCompile Include="Code\TSList.cpp" />
+    <ClCompile Include="Code\TSMap.cpp" />
+    <ClCompile Include="Code\TSOpenDDL.cpp" />
+    <ClCompile Include="Code\TSString.cpp" />
+    <ClCompile Include="Code\TSText.cpp" />
+    <ClCompile Include="Code\TSMath.cpp" />
+    <ClCompile Include="Code\TSHalf.cpp" />
+    <ClCompile Include="Code\TSTree.cpp" />
+    <ClCompile Include="Code\TSTools.cpp" />
+  </ItemGroup>
+</Project>

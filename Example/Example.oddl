@@ -1,0 +1,6 @@
+// This is a simple example structure containing four 32-bit floating-point values.
+
+Example
+{
+	float {1.0, 0.0, 0.0, 0.0}
+}
