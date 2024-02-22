@@ -205,6 +205,12 @@ namespace Terathon
 				return (reinterpret_cast<type *>(bufferStorage));
 			}
 
+			template <typename type>
+			uint32 GetSize(void) const
+			{
+				return bufferSize / sizeof(type);
+			}
+
 			void AllocateBuffer(uint32 size)
 			{
 				if (size != bufferSize)
