@@ -1,6 +1,6 @@
 //
 // This file is part of the Terathon Common Library, by Eric Lengyel.
-// Copyright 1999-2022, Terathon Software LLC
+// Copyright 1999-2024, Terathon Software LLC
 //
 // This software is distributed under the MIT License.
 // Separate proprietary licenses are available from Terathon Software.
@@ -161,7 +161,7 @@ namespace Terathon
 		private:
 
 			char		*bufferStorage;
-			uint32		bufferSize;
+			uint64		bufferSize;
 
 			Buffer(const Buffer& buffer) = delete;
 			Buffer& operator =(const Buffer& s) = delete;
@@ -175,7 +175,7 @@ namespace Terathon
 				bufferStorage = nullptr;
 			}
 
-			explicit Buffer(uint32 size)
+			explicit Buffer(uint64 size)
 			{
 				bufferSize = size;
 				bufferStorage = new char[size];
@@ -205,7 +205,12 @@ namespace Terathon
 				return (reinterpret_cast<type *>(bufferStorage));
 			}
 
-			void AllocateBuffer(uint32 size)
+			uint64 GetBufferSize(void) const
+			{
+				return (bufferSize);
+			}
+
+			void AllocateBuffer(uint64 size)
 			{
 				if (size != bufferSize)
 				{
