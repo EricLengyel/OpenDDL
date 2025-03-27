@@ -601,6 +601,7 @@ String<0>& String<0>::SetStringLength(int32 length)
 				Text::CopyText(stringPointer, localString, copyLength);
 				delete[] stringPointer;
 				stringPointer = localString;
+				physicalSize = kStringLocalSize;
 			}
 
 			stringPointer[length] = 0;
