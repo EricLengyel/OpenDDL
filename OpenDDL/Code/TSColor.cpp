@@ -1,6 +1,6 @@
 //
 // This file is part of the Terathon Common Library, by Eric Lengyel.
-// Copyright 1999-2022, Terathon Software LLC
+// Copyright 1999-2025, Terathon Software LLC
 //
 // This software is distributed under the MIT License.
 // Separate proprietary licenses are available from Terathon Software.
@@ -19,17 +19,6 @@ namespace
 {
 	alignas(16) const char hexDigit[16] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 }
-
-
-const ConstColorRGBA Color::black = {0.0F, 0.0F, 0.0F, 1.0F};
-const ConstColorRGBA Color::white = {1.0F, 1.0F, 1.0F, 1.0F};
-const ConstColorRGBA Color::transparent = {0.0F, 0.0F, 0.0F, 0.0F};
-const ConstColorRGBA Color::red = {1.0F, 0.0F, 0.0F, 1.0F};
-const ConstColorRGBA Color::green = {0.0F, 1.0F, 0.0F, 1.0F};
-const ConstColorRGBA Color::blue = {0.0F, 0.0F, 1.0F, 1.0F};
-const ConstColorRGBA Color::yellow = {1.0F, 1.0F, 0.0F, 1.0F};
-const ConstColorRGBA Color::cyan = {0.0F, 1.0F, 1.0F, 1.0F};
-const ConstColorRGBA Color::magenta = {1.0F, 0.0F, 1.0F, 1.0F};
 
 
 alignas(64) const uint8 Color::srgbLinearizationTable[256] =
@@ -93,6 +82,112 @@ alignas(64) const float Color::srgbFloatLinearizationTable[256] =
 };
 
 
+alignas(16) const ConstColorRGBA Color::black = {0.0F, 0.0F, 0.0F, 1.0F};
+alignas(16) const ConstColorRGBA Color::white = {1.0F, 1.0F, 1.0F, 1.0F};
+alignas(16) const ConstColorRGBA Color::transparent = {0.0F, 0.0F, 0.0F, 0.0F};
+alignas(16) const ConstColorRGBA Color::red = {1.0F, 0.0F, 0.0F, 1.0F};
+alignas(16) const ConstColorRGBA Color::green = {0.0F, 1.0F, 0.0F, 1.0F};
+alignas(16) const ConstColorRGBA Color::blue = {0.0F, 0.0F, 1.0F, 1.0F};
+alignas(16) const ConstColorRGBA Color::yellow = {1.0F, 1.0F, 0.0F, 1.0F};
+alignas(16) const ConstColorRGBA Color::cyan = {0.0F, 1.0F, 1.0F, 1.0F};
+alignas(16) const ConstColorRGBA Color::magenta = {1.0F, 0.0F, 1.0F, 1.0F};
+
+
+void ColorRGB::GetHueSat(float *hue, float *sat) const
+{
+	float M = Fmax(red, green, blue);
+	if (M > Math::min_float)
+	{
+		M = 1.0F / M;
+		float r = red * M;
+		float g = green * M;
+		float b = blue * M;
+
+		float m = Fmin(r, g, b);
+		float s = 1.0F - m;
+		if (s > Math::min_float)
+		{
+			*sat = s;
+			s = 1.0F / s;
+			
+			if ((r >= g) && (r >= b))
+			{
+				float h = (g - b) * s;
+				if (h < 0.0F)
+				{
+					h += 6.0F;
+				}
+
+				*hue = h;
+			}
+			else if (g >= b)
+			{
+				*hue = (b - r) * s + 2.0F;
+			}
+			else
+			{
+				*hue = (r - g) * s + 4.0F;
+			}
+
+			return;
+		}
+	}
+
+	*hue = 0.0F;
+	*sat = 0.0F;
+}
+
+void ColorRGB::SetHueSat(float hue, float sat)
+{
+	float f = Frac(hue) * sat;
+	float s = 1.0F - sat;
+
+	switch (int32(hue))
+	{
+		case 0:
+
+			Set(1.0F, s + f, s);
+			break;
+
+		case 1:
+
+			Set(s + sat - f, 1.0F, s);
+			break;
+
+		case 2:
+
+			Set(s, 1.0F, s + f);
+			break;
+
+		case 3:
+
+			Set(s, s + sat - f, 1.0F);
+			break;
+
+		case 4:
+
+			Set(s + f, s, 1.0F);
+			break;
+
+		case 5:
+
+			Set(1.0F, s, s + sat - f);
+			break;
+	}
+}
+
+ColorRGB ColorRGB::GetBrightestColor(void) const
+{
+	float M = Fmax(red, green, blue);
+	if (M > Math::min_float)
+	{
+		M = 1.0F / M;
+		return (ColorRGB(red * M, green * M, blue * M));
+	}
+
+	return (ColorRGB(1.0F, 1.0F, 1.0F));
+}
+
 uint32 ColorRGB::GetPackedColorRGB9E5(void) const
 {
 	alignas(64) static const uint32 dividerTable[32] =
@@ -106,7 +201,7 @@ uint32 ColorRGB::GetPackedColorRGB9E5(void) const
 	float b = Clamp(blue, 0.0F, 511.0F * 128.0F);
 	float m = Fmax(r, g, b);
 
-	uint32 e = MaxZero((asuint(m) >> 23) - 111);
+	uint32 e = MaxZero(int32(asuint(m) >> 23) - 111);
 	e += uint32(m * asfloat(dividerTable[e]) + 0.5F) >> 9;
 
 	float d = asfloat(dividerTable[e]);
@@ -119,9 +214,9 @@ uint32 ColorRGB::GetPackedColorRGB9E5(void) const
 
 void ColorRGB::GetHexString(char *string) const
 {
-	int32 r = int32(red * 255.0F + 0.5F);
-	int32 g = int32(green * 255.0F + 0.5F);
-	int32 b = int32(blue * 255.0F + 0.5F);
+	int32 r = int32(Color::Delinearize(red) * 255.0F + 0.5F);
+	int32 g = int32(Color::Delinearize(green) * 255.0F + 0.5F);
+	int32 b = int32(Color::Delinearize(blue) * 255.0F + 0.5F);
 
 	string[0] = hexDigit[(r >> 4) & 15];
 	string[1] = hexDigit[r & 15];
@@ -201,9 +296,9 @@ ColorRGB& ColorRGB::SetHexString(const char *string)
 		}
 	}
 
-	red = float(((rh << 4) | rl) * 0.00392156862745F);
-	green = float(((gh << 4) | gl) * 0.00392156862745F);
-	blue = float(((bh << 4) | bl) * 0.00392156862745F);
+	red = (rh << 4) | rl;
+	green = (gh << 4) | gl;
+	blue = (bh << 4) | bl;
 
 	return (*this);
 }
@@ -211,9 +306,9 @@ ColorRGB& ColorRGB::SetHexString(const char *string)
 
 void ColorRGBA::GetHexString(char *string) const
 {
-	int32 r = int32(red * 255.0F + 0.5F);
-	int32 g = int32(green * 255.0F + 0.5F);
-	int32 b = int32(blue * 255.0F + 0.5F);
+	int32 r = int32(Color::Delinearize(red) * 255.0F + 0.5F);
+	int32 g = int32(Color::Delinearize(green) * 255.0F + 0.5F);
+	int32 b = int32(Color::Delinearize(blue) * 255.0F + 0.5F);
 	int32 a = int32(alpha * 255.0F + 0.5F);
 
 	string[0] = hexDigit[(r >> 4) & 15];
@@ -318,10 +413,10 @@ ColorRGBA& ColorRGBA::SetHexString(const char *string)
 		}
 	}
 
-	red = float(((rh << 4) | rl) * 0.00392156862745F);
-	green = float(((gh << 4) | gl) * 0.00392156862745F);
-	blue = float(((bh << 4) | bl) * 0.00392156862745F);
-	alpha = float(((ah << 4) | al) * 0.00392156862745F);
+	red = (rh << 4) | rl;
+	green = (gh << 4) | gl;
+	blue = (bh << 4) | bl;
+	alpha = (ah << 4) | al;
 
 	return (*this);
 }

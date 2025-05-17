@@ -1,6 +1,6 @@
 //
 // This file is part of the Terathon Common Library, by Eric Lengyel.
-// Copyright 1999-2022, Terathon Software LLC
+// Copyright 1999-2025, Terathon Software LLC
 //
 // This software is distributed under the MIT License.
 // Separate proprietary licenses are available from Terathon Software.
@@ -11,8 +11,8 @@
 #define TSString_h
 
 
-//# \component	Utility Library
-//# \prefix		Utilities/
+/// \component	Utility Library
+/// \prefix		Utilities/
 
 
 #include "TSBasic.h"
@@ -24,138 +24,138 @@
 
 namespace Terathon
 {
-	//# \class	String		Encapsulates a character string.
-	//
-	//# The $String$ class template encapsulates a character string having a fixed maximum length.
-	//
-	//# \def	template <int32 len = 0> class String
-	//
-	//# \tparam		len		The maximum length of the string, excluding the null terminator.
-	//
-	//# \ctor	String();
-	//# \ctor	String(const String<len>& s);
-	//# \ctor	String(const char *s);
-	//# \ctor	String(const char *s, int32 length);
-	//# \ctor	explicit String(int32 n);
-	//# \ctor	explicit String(float n);
-	//
-	//# \param	s		A reference to another $String$ object or a pointer to a null-terminated
-	//#					string that initializes the new $String$ object.
-	//# \param	length	If specified, then the string is initialized with the character string pointed
-	//#					to by the $s$ parameter, but at most $length$ characters are copied.
-	//# \param	n		A signed integer or floating-point value that is converted to a decimal string
-	//#					to initialize the new $String$ object.
-	//
-	//# \desc
-	//# The $String$ class template can be used to store and manipulate strings. The $len$
-	//# parameter establishes the maximum length of the string, excluding the null terminator.
-	//# If the $len$ parameter is zero (the default if the parameter is not specified), then
-	//# the string has unlimited length, and allocation for the memory used by the string is
-	//# automatically managed.
-	//#
-	//# If the $len$ parameter is not zero, then the default constructor leaves the contents of the string
-	//# undefined (and unterminated). If the $len$ parameter is zero, then the $String$ object is initially
-	//# set to the empty string.
-	//#
-	//# $String$ objects can always be implicitly converted to a pointer to $char$ and thus can
-	//# be accepted by any function expecting a parameter of type $char *$.
-	//
-	//# In addition to the member functions of the $String$ class, the $@Text@$ namespace contains several
-	//# functions that are useful for manipulating character strings.
-	//
-	//# \operator	operator char *(void);
-	//#				A $String$ object can be implicitly converted to an array of $char$.
-	//
-	//# \operator	operator const char *(void) const;
-	//#				A $const String$ object can be implicitly converted to an array of $const char$.
-	//
-	//# \operator	String& operator =(const char *s);
-	//#				Sets the contents of the $String$ object to the string pointed to by $s$.
-	//#				If necessary, the string is truncated to the maximum length given by $len$.
-	//
-	//# \operator	String& operator +=(const char *s);
-	//#				Appends the string pointed to by $s$ to the $String$ object, truncating to
-	//#				the maximum length given by $len$.
-	//
-	//# \operator	String& operator +=(int32 n);
-	//#				Converts the signed integer $n$ to a decimal string and appends it to the
-	//#				$String$ object, truncating to the maximum length given by $len$.
-	//
-	//# \operator	String operator +(const char *s) const;
-	//#				Returns a new $String$ object containing the concatenation with the string
-	//#				pointed to by $s$. If necessary, the new string is truncated to the maximum
-	//#				length given by $len$.
-	//
-	//# \operator	String operator +(int32 n) const;
-	//#				Returns a new $String$ object containing the concatenation with the decimal
-	//#				string corresponding to &n&. If necessary, the new string is truncated to the
-	//#				maximum length given by $len$.
-	//
-	//# \operator	bool operator ==(const char *s) const;
-	//#				Returns a boolean value indicating whether two strings have equal contents.
-	//
-	//# \operator	bool operator !=(const char *s) const;
-	//#				Returns a boolean value indicating whether two strings have differing contents.
-	//
-	//# \operator	bool operator <(const char *s) const;
-	//#				Returns a boolean value indicating whether the text in the $String$ object
-	//#				precedes the text pointed to by $s$ in lexicographical order.
-	//
-	//# \operator	bool operator >(const char *s) const;
-	//#				Returns a boolean value indicating whether the text in the $String$ object
-	//#				follows the text pointed to by $s$ in lexicographical order.
-	//
-	//# \operator	bool operator <=(const char *s) const;
-	//#				Returns a boolean value indicating whether the text in the $String$ object
-	//#				precedes the text pointed to by $s$ in lexicographical order
-	//#				or the two strings are equal.
-	//
-	//# \operator	bool operator >=(const char *s) const;
-	//#				Returns a boolean value indicating whether the text in the $String$ object
-	//#				follows the text pointed to by $s$ in lexicographical order
-	//#				or the two strings are equal.
-	//
-	//# \also	$@Text@$
+	/// \class	String		Encapsulates a character string.
+	///
+	/// The $String$ class template encapsulates a character string having a fixed maximum length.
+	///
+	/// \def	template <int32 len = 0> class String
+	///
+	/// \tparam		len		The maximum length of the string, excluding the null terminator.
+	///
+	/// \ctor	String();
+	/// \ctor	String(const String<len>& s);
+	/// \ctor	String(const char *s);
+	/// \ctor	String(const char *s, int32 length);
+	/// \ctor	explicit String(int32 n);
+	/// \ctor	explicit String(float n);
+	///
+	/// \param	s		A reference to another $String$ object or a pointer to a null-terminated
+	///					string that initializes the new $String$ object.
+	/// \param	length	If specified, then the string is initialized with the character string pointed
+	///					to by the $s$ parameter, but at most $length$ characters are copied.
+	/// \param	n		A signed integer or floating-point value that is converted to a decimal string
+	///					to initialize the new $String$ object.
+	///
+	/// \desc
+	/// The $String$ class template can be used to store and manipulate strings. The $len$
+	/// parameter establishes the maximum length of the string, excluding the null terminator.
+	/// If the $len$ parameter is zero (the default if the parameter is not specified), then
+	/// the string has unlimited length, and allocation for the memory used by the string is
+	/// automatically managed.
+	///
+	/// If the $len$ parameter is not zero, then the default constructor leaves the contents of the string
+	/// undefined (and unterminated). If the $len$ parameter is zero, then the $String$ object is initially
+	/// set to the empty string.
+	///
+	/// $String$ objects can always be implicitly converted to a pointer to $char$ and thus can
+	/// be accepted by any function expecting a parameter of type $char *$.
+	///
+	/// In addition to the member functions of the $String$ class, the $@Text@$ namespace contains several
+	/// functions that are useful for manipulating character strings.
+	///
+	/// \operator	operator char *(void);
+	///				A $String$ object can be implicitly converted to an array of $char$.
+	///
+	/// \operator	operator const char *(void) const;
+	///				A $const String$ object can be implicitly converted to an array of $const char$.
+	///
+	/// \operator	String& operator =(const char *s);
+	///				Sets the contents of the $String$ object to the string pointed to by $s$.
+	///				If necessary, the string is truncated to the maximum length given by $len$.
+	///
+	/// \operator	String& operator +=(const char *s);
+	///				Appends the string pointed to by $s$ to the $String$ object, truncating to
+	///				the maximum length given by $len$.
+	///
+	/// \operator	String& operator +=(int32 n);
+	///				Converts the signed integer $n$ to a decimal string and appends it to the
+	///				$String$ object, truncating to the maximum length given by $len$.
+	///
+	/// \operator	String operator +(const char *s) const;
+	///				Returns a new $String$ object containing the concatenation with the string
+	///				pointed to by $s$. If necessary, the new string is truncated to the maximum
+	///				length given by $len$.
+	///
+	/// \operator	String operator +(int32 n) const;
+	///				Returns a new $String$ object containing the concatenation with the decimal
+	///				string corresponding to &n&. If necessary, the new string is truncated to the
+	///				maximum length given by $len$.
+	///
+	/// \operator	bool operator ==(const char *s) const;
+	///				Returns a boolean value indicating whether two strings have equal contents.
+	///
+	/// \operator	bool operator !=(const char *s) const;
+	///				Returns a boolean value indicating whether two strings have differing contents.
+	///
+	/// \operator	bool operator <(const char *s) const;
+	///				Returns a boolean value indicating whether the text in the $String$ object
+	///				precedes the text pointed to by $s$ in lexicographical order.
+	///
+	/// \operator	bool operator >(const char *s) const;
+	///				Returns a boolean value indicating whether the text in the $String$ object
+	///				follows the text pointed to by $s$ in lexicographical order.
+	///
+	/// \operator	bool operator <=(const char *s) const;
+	///				Returns a boolean value indicating whether the text in the $String$ object
+	///				precedes the text pointed to by $s$ in lexicographical order
+	///				or the two strings are equal.
+	///
+	/// \operator	bool operator >=(const char *s) const;
+	///				Returns a boolean value indicating whether the text in the $String$ object
+	///				follows the text pointed to by $s$ in lexicographical order
+	///				or the two strings are equal.
+	///
+	/// \also	$@Text@$
 
 
-	//# \function	String::GetStringLength		Returns the length of a string.
-	//
-	//# \proto	int32 GetStringLength(void) const;
-	//
-	//# \desc
-	//# The $GetStringLength$ function returns the length of the text contained in a $String$ object.
-	//# The contents of the $String$ object must be defined so that the text is null-terminated.
-	//# (The overloaded operators that manipulate the $String$ object all maintain the null terminator.)
+	/// \function	String::GetStringLength		Returns the length of a string.
+	///
+	/// \proto	int32 GetStringLength(void) const;
+	///
+	/// \desc
+	/// The $GetStringLength$ function returns the length of the text contained in a $String$ object.
+	/// The contents of the $String$ object must be defined so that the text is null-terminated.
+	/// (The overloaded operators that manipulate the $String$ object all maintain the null terminator.)
 
 
-	//# \function	String::ConvertToLowerCase		Converts each alphabetic character to lower case.
-	//
-	//# \proto	String<0>& ConvertToLowerCase(void);
-	//
-	//# \desc
-	//# The $ConvertToLowerCase$ function examines each character in the string and converts any
-	//# in the range $'A'$ to $'Z'$ to lower case.
-	//#
-	//# \note
-	//# The $ConvertToLowerCase$ function is available only when the $len$ template parameter for the $String$
-	//# class is the default value of zero.
-	//
-	//# \also	$@String::ConvertToUpperCase@$
+	/// \function	String::ConvertToLowerCase		Converts each alphabetic character to lower case.
+	///
+	/// \proto	String<0>& ConvertToLowerCase(void);
+	///
+	/// \desc
+	/// The $ConvertToLowerCase$ function examines each character in the string and converts any
+	/// in the range $'A'$ to $'Z'$ to lower case.
+	///
+	/// \note
+	/// The $ConvertToLowerCase$ function is available only when the $len$ template parameter for the $String$
+	/// class is the default value of zero.
+	///
+	/// \also	$@String::ConvertToUpperCase@$
 
 
-	//# \function	String::ConvertToUpperCase		Converts each alphabetic character to upper case.
-	//
-	//# \proto	String<0>& ConvertToUpperCase(void);
-	//
-	//# \desc
-	//# The $ConvertToUpperCase$ function examines each character in the string and converts any
-	//# in the range $'a'$ to $'z'$ to upper case.
-	//#
-	//# \note
-	//# The $ConvertToUpperCase$ function is available only when the $len$ template parameter for the $String$
-	//# class is the default value of zero.
-	//
-	//# \also	$@String::ConvertToLowerCase@$
+	/// \function	String::ConvertToUpperCase		Converts each alphabetic character to upper case.
+	///
+	/// \proto	String<0>& ConvertToUpperCase(void);
+	///
+	/// \desc
+	/// The $ConvertToUpperCase$ function examines each character in the string and converts any
+	/// in the range $'a'$ to $'z'$ to upper case.
+	///
+	/// \note
+	/// The $ConvertToUpperCase$ function is available only when the $len$ template parameter for the $String$
+	/// class is the default value of zero.
+	///
+	/// \also	$@String::ConvertToLowerCase@$
 
 
 	template <int32 len = 0>
@@ -413,7 +413,7 @@ namespace Terathon
 			TERATHON_API String(uint32 n, const char *s1);
 			TERATHON_API String(int64 n, const char *s1);
 
-			static uint32 GetPhysicalSize(uint32 size);
+			static int32 GetPhysicalSize(int32 size);
 
 			void Resize(int32 size);
 
@@ -444,7 +444,7 @@ namespace Terathon
 
 			bool operator ==(const String& s) const
 			{
-				return (Text::CompareText(stringPointer, s.stringPointer));
+				return ((logicalSize == s.logicalSize) && (Text::CompareText(stringPointer, s.stringPointer)));
 			}
 
 			bool operator ==(const char *s) const
@@ -454,7 +454,7 @@ namespace Terathon
 
 			bool operator !=(const String& s) const
 			{
-				return (!Text::CompareText(stringPointer, s.stringPointer));
+				return ((logicalSize != s.logicalSize) || (!Text::CompareText(stringPointer, s.stringPointer)));
 			}
 
 			bool operator !=(const char *s) const
@@ -527,12 +527,14 @@ namespace Terathon
 
 			TERATHON_API String& SetStringLength(int32 length);
 			TERATHON_API String& AppendString(const char *s, int32 length);
+			TERATHON_API String& InsertString(int32 offset, const char *s, int32 length);
+			TERATHON_API String& RemoveString(int32 offset, int32 length);
 
 			TERATHON_API String& ConvertToLowerCase(void);
 			TERATHON_API String& ConvertToUpperCase(void);
 			TERATHON_API String& ReplaceChar(char x, char y);
 
-			TERATHON_API String& EncodeEscapeSequences(void);
+			TERATHON_API String& EncodeEscapeSequences(bool extra = false);
 	};
 
 
@@ -702,6 +704,7 @@ namespace Terathon
 
 		TERATHON_API String<31> Integer64ToHexString16(uint64 num);
 		TERATHON_API String<15> IntegerToHexString8(uint32 num);
+		TERATHON_API String<7> IntegerToHexString6(uint32 num);
 		TERATHON_API String<7> IntegerToHexString4(uint32 num);
 		TERATHON_API String<3> IntegerToHexString2(uint32 num);
 

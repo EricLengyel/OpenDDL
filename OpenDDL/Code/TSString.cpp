@@ -1,6 +1,6 @@
 //
 // This file is part of the Terathon Common Library, by Eric Lengyel.
-// Copyright 1999-2022, Terathon Software LLC
+// Copyright 1999-2025, Terathon Software LLC
 //
 // This software is distributed under the MIT License.
 // Separate proprietary licenses are available from Terathon Software.
@@ -13,7 +13,7 @@
 using namespace Terathon;
 
 
-inline uint32 String<0>::GetPhysicalSize(uint32 size)
+inline int32 String<0>::GetPhysicalSize(int32 size)
 {
 	return ((size + (kStringAllocSize + 3)) & ~(kStringAllocSize - 1));
 }
@@ -641,6 +641,69 @@ String<0>& String<0>::AppendString(const char *s, int32 length)
 	return (*this);
 }
 
+String<0>& String<0>::InsertString(int32 offset, const char *s, int32 length)
+{
+	if (length > 0)
+	{
+		int32 size = logicalSize + length;
+		if (size > physicalSize)
+		{
+			physicalSize = Max(GetPhysicalSize(size), physicalSize + physicalSize / 2);
+			char *newPointer = new char[physicalSize];
+
+			Text::CopyText(stringPointer, newPointer, offset);
+			Text::CopyText(s, &newPointer[offset], length);
+			Text::CopyText(&stringPointer[offset], &newPointer[offset + length]);
+
+			if (stringPointer != localString)
+			{
+				delete[] stringPointer;
+			}
+
+			stringPointer = newPointer;
+		}
+		else
+		{
+			char *t = &stringPointer[offset];
+			int32 count = logicalSize - offset;
+			for (machine a = count - 1; a >= 0; a--)
+			{
+				t[a + length] = t[a];
+			}
+
+			for (machine a = 0; a < length; a++)
+			{
+				t[a] = s[a];
+			}
+		}
+
+		logicalSize = size;
+	}
+
+	return (*this);
+}
+
+String<0>& String<0>::RemoveString(int32 offset, int32 length)
+{
+	length = Min(length, logicalSize - offset - 1);
+	if (length > 0)
+	{
+		Text::CopyText(&stringPointer[offset + length], &stringPointer[offset]);
+		int32 size = logicalSize - length;
+		logicalSize = size;
+
+		if ((stringPointer != localString) && (size <= kStringLocalSize))
+		{
+			Text::CopyText(stringPointer, localString);
+			delete[] stringPointer;
+			stringPointer = localString;
+			physicalSize = kStringLocalSize;
+		}
+	}
+
+	return (*this);
+}
+
 String<0>& String<0>::ConvertToLowerCase(void)
 {
 	uint8 *byte = reinterpret_cast<uint8 *>(stringPointer);
@@ -704,19 +767,30 @@ String<0>& String<0>::ReplaceChar(char x, char y)
 	return (*this);
 }
 
-String<0>& String<0>::EncodeEscapeSequences(void)
+String<0>& String<0>::EncodeEscapeSequences(bool extra)
 {
-	alignas(64) static const uint8 encodedSize[128] =
+	alignas(64) static const uint8 encodedSizeTable[2][128] =
 	{
-		1, 4, 4, 4, 4, 4, 4, 2, 2, 2, 2, 2, 2, 2, 4, 4,
-		4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-		1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-		1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-		1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-		1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1,
-		1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-		1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4
+		{1, 4, 4, 4, 4, 4, 4, 2, 2, 2, 2, 2, 2, 2, 4, 4,
+		 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+		 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+		 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+		 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+		 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1,
+		 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+		 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4},
+
+		{1, 4, 4, 4, 4, 4, 4, 2, 2, 2, 2, 2, 2, 2, 4, 4,
+		 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+		 1, 1, 2, 1, 1, 1, 4, 2, 1, 1, 1, 1, 1, 4, 1, 1,
+		 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1, 4, 2,
+		 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+		 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1,
+		 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+		 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4}
 	};
+
+	const uint8 *sizeTable = encodedSizeTable[extra];
 
 	int32 encodedLength = 0;
 	int32 maxCharSize = 1;
@@ -732,7 +806,7 @@ String<0>& String<0>::EncodeEscapeSequences(void)
 
 		if (c < 128U)
 		{
-			int32 size = encodedSize[c];
+			int32 size = sizeTable[c];
 			maxCharSize = Max(maxCharSize, size);
 			encodedLength += size;
 		}
@@ -762,7 +836,7 @@ String<0>& String<0>::EncodeEscapeSequences(void)
 
 			if (c < 128U)
 			{
-				int32 size = encodedSize[c];
+				int32 size = sizeTable[c];
 				if (size == 1)
 				{
 					encodedByte[0] = uint8(c);
@@ -856,6 +930,21 @@ String<15> Text::IntegerToHexString8(uint32 num)
 	text[6] = hexDigit[(num >> 4) & 15];
 	text[7] = hexDigit[num & 15];
 	text[8] = 0;
+
+	return (text);
+}
+
+String<7> Text::IntegerToHexString6(uint32 num)
+{
+	String<7>		text;
+
+	text[0] = hexDigit[(num >> 20) & 15];
+	text[1] = hexDigit[(num >> 16) & 15];
+	text[2] = hexDigit[(num >> 12) & 15];
+	text[3] = hexDigit[(num >> 8) & 15];
+	text[4] = hexDigit[(num >> 4) & 15];
+	text[5] = hexDigit[num & 15];
+	text[6] = 0;
 
 	return (text);
 }

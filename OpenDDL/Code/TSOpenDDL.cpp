@@ -1,6 +1,6 @@
 //
 // This file is part of the Terathon OpenDDL Library, by Eric Lengyel.
-// Copyright 1999-2022, Terathon Software LLC
+// Copyright 1999-2025, Terathon Software LLC
 //
 // This software is distributed under the MIT License.
 // Separate proprietary licenses are available from Terathon Software.
@@ -338,6 +338,8 @@ DataResult Structure::ProcessData(DataDescription *dataDescription)
 	Structure *structure = GetFirstSubnode();
 	while (structure)
 	{
+		Structure *nextStructure = structure->GetNextSubnode();
+
 		DataResult result = structure->ProcessData(dataDescription);
 		if (result != kDataOkay)
 		{
@@ -349,7 +351,7 @@ DataResult Structure::ProcessData(DataDescription *dataDescription)
 			return (result);
 		}
 
-		structure = structure->GetNextSubnode();
+		structure = nextStructure;
 	}
 
 	return (kDataOkay);
@@ -568,6 +570,7 @@ DataDescription::DataDescription()
 
 DataDescription::~DataDescription()
 {
+	structureMap.RemoveAllMapElements();
 }
 
 Structure *DataDescription::FindStructure(const StructureRef& reference) const

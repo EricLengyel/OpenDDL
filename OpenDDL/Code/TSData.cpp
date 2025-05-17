@@ -1,6 +1,6 @@
 //
 // This file is part of the Terathon OpenDDL Library, by Eric Lengyel.
-// Copyright 1999-2022, Terathon Software LLC
+// Copyright 1999-2025, Terathon Software LLC
 //
 // This software is distributed under the MIT License.
 // Separate proprietary licenses are available from Terathon Software.
@@ -954,19 +954,19 @@ DataResult Data::ReadIntegerLiteral(const char *text, int32 *textLength, uint64 
 	uint32 c = byte[0];
 	if (c == '0')
 	{
-		c = byte[1];
+		c = byte[1] | 0x20;
 
-		if ((c == 'x') || (c == 'X'))
+		if (c == 'x')
 		{
 			return (ReadHexadecimalLiteral(text, textLength, value));
 		}
 
-		if ((c == 'o') || (c == 'O'))
+		if (c == 'o')
 		{
 			return (ReadOctalLiteral(text, textLength, value));
 		}
 
-		if ((c == 'b') || (c == 'B'))
+		if (c == 'b')
 		{
 			return (ReadBinaryLiteral(text, textLength, value));
 		}
@@ -1000,9 +1000,9 @@ DataResult Data::ReadFloatLiteral(const char *text, int32 *textLength, type *val
 	uint32 c = byte[0];
 	if (c == '0')
 	{
-		c = byte[1];
+		c = byte[1] | 0x20;
 
-		if ((c == 'x') || (c == 'X'))
+		if (c == 'x')
 		{
 			uint64		v;
 
@@ -1020,7 +1020,7 @@ DataResult Data::ReadFloatLiteral(const char *text, int32 *textLength, type *val
 			return (result);
 		}
 
-		if ((c == 'o') || (c == 'O'))
+		if (c == 'o')
 		{
 			uint64		v;
 
@@ -1038,7 +1038,7 @@ DataResult Data::ReadFloatLiteral(const char *text, int32 *textLength, type *val
 			return (result);
 		}
 
-		if ((c == 'b') || (c == 'B'))
+		if (c == 'b')
 		{
 			uint64		v;
 
@@ -1156,7 +1156,7 @@ DataResult Data::ReadFloatLiteral(const char *text, int32 *textLength, type *val
 			uint32 x = byte[0] - '0';
 			if (x < 10U)
 			{
-				exponent = Min(exponent * 10 + x, 65535);
+				exponent = Min(int32(exponent * 10 + x), 65535);
 				digitFlag = true;
 			}
 			else if (x == 47)

@@ -1,6 +1,6 @@
 //
 // This file is part of the Terathon Math Library, by Eric Lengyel.
-// Copyright 1999-2022, Terathon Software LLC
+// Copyright 1999-2025, Terathon Software LLC
 //
 // This software is distributed under the MIT License.
 // Separate proprietary licenses are available from Terathon Software.
@@ -13,7 +13,7 @@
 using namespace Terathon;
 
 
-const ConstQuaternion Quaternion::identity = {0.0F, 0.0F, 0.0F, 1.0F};
+alignas(16) const ConstQuaternion Quaternion::identity = {0.0F, 0.0F, 0.0F, 1.0F};
 
 
 Quaternion& Quaternion::operator *=(const Quaternion& q)
@@ -23,9 +23,7 @@ Quaternion& Quaternion::operator *=(const Quaternion& q)
 	float c = w * q.z + x * q.y - y * q.x + z * q.w;
 
 	w = w * q.w - x * q.x - y * q.y - z * q.z;
-	x = a;
-	y = b;
-	z = c;
+	xyz.Set(a, b, c);
 
 	return (*this);
 }
@@ -37,9 +35,7 @@ Quaternion& Quaternion::operator *=(const Bivector3D& v)
 	float c = w * v.z + x * v.y - y * v.x;
 
 	w = -x * v.x - y * v.y - z * v.z;
-	x = a;
-	y = b;
-	z = c;
+	xyz.Set(a, b, c);
 
 	return (*this);
 }
@@ -59,8 +55,8 @@ Matrix3D Quaternion::GetRotationMatrix(void) const
 	float wz = w * z;
 
 	return (Matrix3D(1.0F - 2.0F * (y2 + z2), 2.0F * (xy - wz), 2.0F * (zx + wy),
-					 2.0F * (xy + wz), 1.0F - 2.0F * (x2 + z2), 2.0F * (yz - wx),
-					 2.0F * (zx - wy), 2.0F * (yz + wx), 1.0F - 2.0F * (x2 + y2)));
+	                 2.0F * (xy + wz), 1.0F - 2.0F * (x2 + z2), 2.0F * (yz - wx),
+	                 2.0F * (zx - wy), 2.0F * (yz + wx), 1.0F - 2.0F * (x2 + y2)));
 }
 
 template <class matrix>
@@ -113,24 +109,24 @@ Quaternion& Quaternion::SetRotationMatrix(const matrix& M)
 	return (*this);
 }
 
-template Quaternion& Quaternion::SetRotationMatrix(const Matrix3D& M);
-template Quaternion& Quaternion::SetRotationMatrix(const Transform4D& M);
+template TERATHON_API Quaternion& Quaternion::SetRotationMatrix(const Matrix3D& M);
+template TERATHON_API Quaternion& Quaternion::SetRotationMatrix(const Transform3D& M);
 
 
 Quaternion Terathon::operator *(const Quaternion& q1, const Quaternion& q2)
 {
 	return (Quaternion(q1.w * q2.x + q1.x * q2.w + q1.y * q2.z - q1.z * q2.y,
-					   q1.w * q2.y - q1.x * q2.z + q1.y * q2.w + q1.z * q2.x,
-					   q1.w * q2.z + q1.x * q2.y - q1.y * q2.x + q1.z * q2.w,
-					   q1.w * q2.w - q1.x * q2.x - q1.y * q2.y - q1.z * q2.z));
+	                   q1.w * q2.y - q1.x * q2.z + q1.y * q2.w + q1.z * q2.x,
+	                   q1.w * q2.z + q1.x * q2.y - q1.y * q2.x + q1.z * q2.w,
+	                   q1.w * q2.w - q1.x * q2.x - q1.y * q2.y - q1.z * q2.z));
 }
 
 Quaternion Terathon::operator *(const Quaternion& q, const Bivector3D& v)
 {
 	return (Quaternion(q.w * v.x + q.y * v.z - q.z * v.y,
-					   q.w * v.y - q.x * v.z + q.z * v.x,
-					   q.w * v.z + q.x * v.y - q.y * v.x,
-					  -q.x * v.x - q.y * v.y - q.z * v.z));
+	                   q.w * v.y - q.x * v.z + q.z * v.x,
+	                   q.w * v.z + q.x * v.y - q.y * v.x,
+	                  -q.x * v.x - q.y * v.y - q.z * v.z));
 }
 
 Quaternion Terathon::Sqrt(const Quaternion& q)
@@ -141,6 +137,6 @@ Quaternion Terathon::Sqrt(const Quaternion& q)
 
 Vector3D Terathon::Transform(const Vector3D& v, const Quaternion& q)
 {
-	const Bivector3D& b = q.GetBivectorPart();
-	return (v * (q.w * q.w - SquaredMag(b)) + Complement(b * ((v ^ b) * 2.0F) + (!b ^ v) * (q.w * 2.0F)));
+	Bivector3D u = (!q.xyz ^ v) * 2.0F;
+	return ((q.xyz ^ u) + !u * q.w + v);
 }

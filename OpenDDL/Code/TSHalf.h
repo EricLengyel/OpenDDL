@@ -1,6 +1,6 @@
 //
 // This file is part of the Terathon Common Library, by Eric Lengyel.
-// Copyright 1999-2022, Terathon Software LLC
+// Copyright 1999-2025, Terathon Software LLC
 //
 // This software is distributed under the MIT License.
 // Separate proprietary licenses are available from Terathon Software.
@@ -37,6 +37,11 @@ namespace Terathon
 
 			inline Half() = default;
 
+			Half(const Half& h)
+			{
+				value = h.value;
+			}
+
 			Half(float v)
 			{
 				SetFloat(v);
@@ -52,7 +57,11 @@ namespace Terathon
 				return (GetFloat());
 			}
 
-			inline Half& operator =(const Half& h) = default;
+			inline Half& operator =(const Half& h)
+			{
+				value = h.value;
+				return (*this);
+			}
 
 			Half& operator =(float v)
 			{

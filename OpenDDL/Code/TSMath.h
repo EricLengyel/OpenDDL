@@ -1,6 +1,6 @@
 //
 // This file is part of the Terathon Math Library, by Eric Lengyel.
-// Copyright 1999-2022, Terathon Software LLC
+// Copyright 1999-2025, Terathon Software LLC
 //
 // This software is distributed under the MIT License.
 // Separate proprietary licenses are available from Terathon Software.
@@ -9,10 +9,6 @@
 
 #ifndef TSMath_h
 #define TSMath_h
-
-
-//# \component	Math Library
-//# \prefix		Math/
 
 
 #ifndef TERATHON_NO_SIMD
@@ -28,6 +24,8 @@
 
 #define TERATHON_MATH 1
 
+
+/// \brief Terathon math and container namespace.
 
 namespace Terathon
 {

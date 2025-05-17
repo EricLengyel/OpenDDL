@@ -1,6 +1,6 @@
 //
 // This file is part of the Terathon Common Library, by Eric Lengyel.
-// Copyright 1999-2024, Terathon Software LLC
+// Copyright 1999-2025, Terathon Software LLC
 //
 // This software is distributed under the MIT License.
 // Separate proprietary licenses are available from Terathon Software.
@@ -11,8 +11,8 @@
 #define TSTools_h
 
 
-//# \component	Utility Library
-//# \prefix		Utilities/
+/// \component	Utility Library
+/// \prefix		Utilities/
 
 
 #include "TSPlatform.h"
@@ -47,64 +47,64 @@ namespace Terathon
 	#endif
 
 
-	//# \class	Range	Encapsulates a range of values.
-	//
-	//# The $Range$ class template encapsulates a range of values.
-	//
-	//# \def	template <typename type> struct Range
-	//
-	//# \tparam		type	The type of value used to represent the beginning and end of a range.
-	//
-	//# \data	Range
-	//
-	//# \ctor	Range();
-	//# \ctor	Range(const type& x, const type& y);
-	//
-	//# \param	x	The beginning of the range.
-	//# \param	y	The end of the range.
-	//
-	//# \desc
-	//# The $Range$ class template encapsulates a range of values of the type given by the
-	//# $type$ class template.
-	//#
-	//# The default constructor leaves the beginning and end values of the range undefined.
-	//# If the values $x$ and $y$ are supplied, then they are assigned to the beginning and
-	//# end of the range, respectively.
-	//
-	//# \operator	type& operator [](machine index);
-	//#				Returns a reference to the minimum value if $index$ is 0, and returns a reference to the maximum value if $index$ is 1.
-	//#				The $index$ parameter must be 0 or 1.
-	//
-	//# \operator	const type& operator [](machine index) const;
-	//#				Returns a constant reference to the minimum value if $index$ is 0, and returns a constant reference to the maximum value if $index$ is 1.
-	//#				The $index$ parameter must be 0 or 1.
-	//
-	//# \operator	bool operator ==(const Range& range) const;
-	//#				Returns a boolean value indicating whether two ranges are equal.
-	//
-	//# \operator	bool operator !=(const Range& range) const;
-	//#				Returns a boolean value indicating whether two ranges are not equal.
+	/// \class	Range	Encapsulates a range of values.
+	///
+	/// The $Range$ class template encapsulates a range of values.
+	///
+	/// \def	template <typename type> struct Range
+	///
+	/// \tparam		type	The type of value used to represent the beginning and end of a range.
+	///
+	/// \data	Range
+	///
+	/// \ctor	Range();
+	/// \ctor	Range(const type& x, const type& y);
+	///
+	/// \param	x	The beginning of the range.
+	/// \param	y	The end of the range.
+	///
+	/// \desc
+	/// The $Range$ class template encapsulates a range of values of the type given by the
+	/// $type$ class template.
+	///
+	/// The default constructor leaves the beginning and end values of the range undefined.
+	/// If the values $x$ and $y$ are supplied, then they are assigned to the beginning and
+	/// end of the range, respectively.
+	///
+	/// \operator	type& operator [](machine index);
+	///				Returns a reference to the minimum value if $index$ is 0, and returns a reference to the maximum value if $index$ is 1.
+	///				The $index$ parameter must be 0 or 1.
+	///
+	/// \operator	const type& operator [](machine index) const;
+	///				Returns a constant reference to the minimum value if $index$ is 0, and returns a constant reference to the maximum value if $index$ is 1.
+	///				The $index$ parameter must be 0 or 1.
+	///
+	/// \operator	bool operator ==(const Range& range) const;
+	///				Returns a boolean value indicating whether two ranges are equal.
+	///
+	/// \operator	bool operator !=(const Range& range) const;
+	///				Returns a boolean value indicating whether two ranges are not equal.
 
 
-	//# \function	Range::Set		Sets the beginning and end of a range.
-	//
-	//# \proto	Range& Set(const type& x, const type& y);
-	//
-	//# \param	x	The new beginning of the range.
-	//# \param	y	The new end of the range.
-	//
-	//# \desc
-	//# The $Set$ function sets the beginning and end of a range to the values given by the
-	//# $x$ and $y$ parameters, respectively.
+	/// \function	Range::Set		Sets the beginning and end of a range.
+	///
+	/// \proto	Range& Set(const type& x, const type& y);
+	///
+	/// \param	x	The new beginning of the range.
+	/// \param	y	The new end of the range.
+	///
+	/// \desc
+	/// The $Set$ function sets the beginning and end of a range to the values given by the
+	/// $x$ and $y$ parameters, respectively.
 
 
-	//# \member		Range
+	/// \member		Range
 
 	template <typename type>
 	struct Range
 	{
-		type	min;		//## The beginning of the range.
-		type	max;		//## The end of the range.
+		type	min;		///< The beginning of the range.
+		type	max;		///< The end of the range.
 
 		inline Range() = default;
 
@@ -222,28 +222,28 @@ namespace Terathon
 	};
 
 
-	//# \class	Holder		A helper class the wraps a pointer to an object.
-	//
-	//# \def	template <class type> class Holder
-	//
-	//# \tparam	type	The type of object to which the $Holder$ object refers.
-	//
-	//# \ctor	explicit Holder(type *ptr);
-	//
-	//# \param	ptr		A pointer to the object that is wrapped by the $Holder$ object.
-	//
-	//# \desc
-	//# The $Holder$ class template is a helper class that wraps a pointer to an object.
-	//# When a $Holder$ object is destroyed (usually by going out of scope), the object
-	//# that was passed into the $ptr$ parameter when the $Holder$ object was constructed
-	//# is automatically deleted with the $delete$ operator.
-	//#
-	//# A $Holder$ object behaves like a pointer to an object of the type given by the
-	//# $type$ template parameter. A $Holder$ object can be passed as a function parameter
-	//# wherever a pointer to $type$ is expected, and the $->$ operator can be used to access
-	//# members of the object that the $Holder$ object wraps.
-	//
-	//# \also	$@AutoRelease@$
+	/// \class	Holder		A helper class the wraps a pointer to an object.
+	///
+	/// \def	template <class type> class Holder
+	///
+	/// \tparam	type	The type of object to which the $Holder$ object refers.
+	///
+	/// \ctor	explicit Holder(type *ptr);
+	///
+	/// \param	ptr		A pointer to the object that is wrapped by the $Holder$ object.
+	///
+	/// \desc
+	/// The $Holder$ class template is a helper class that wraps a pointer to an object.
+	/// When a $Holder$ object is destroyed (usually by going out of scope), the object
+	/// that was passed into the $ptr$ parameter when the $Holder$ object was constructed
+	/// is automatically deleted with the $delete$ operator.
+	///
+	/// A $Holder$ object behaves like a pointer to an object of the type given by the
+	/// $type$ template parameter. A $Holder$ object can be passed as a function parameter
+	/// wherever a pointer to $type$ is expected, and the $->$ operator can be used to access
+	/// members of the object that the $Holder$ object wraps.
+	///
+	/// \also	$@AutoRelease@$
 
 
 	template <class type>
@@ -358,64 +358,64 @@ namespace Terathon
 	};
 
 
-	//# \class	Shared		The base class for reference-counted objects.
-	//
-	//# Objects inherit from the $Shared$ class when they contain shared data and
-	//# need to be reference counted.
-	//
-	//# \def	class Shared
-	//
-	//# \ctor	Shared();
-	//
-	//# \desc
-	//# The $Shared$ class encapsulates a reference count for objects that can be shared.
-	//# Upon construction, the object's reference count is initialized to 1.
-	//
-	//# \important
-	//# The destructor of the $Shared$ class does not have public access, and the destructors
-	//# of any subclasses of the $Shared$ class should not have public access. Shared objects
-	//# must be released by calling the $@Shared::Release@$ function.
-	//
-	//# \also	$@AutoRelease@$
+	/// \class	Shared		The base class for reference-counted objects.
+	///
+	/// Objects inherit from the $Shared$ class when they contain shared data and
+	/// need to be reference counted.
+	///
+	/// \def	class Shared
+	///
+	/// \ctor	Shared();
+	///
+	/// \desc
+	/// The $Shared$ class encapsulates a reference count for objects that can be shared.
+	/// Upon construction, the object's reference count is initialized to 1.
+	///
+	/// \important
+	/// The destructor of the $Shared$ class does not have public access, and the destructors
+	/// of any subclasses of the $Shared$ class should not have public access. Shared objects
+	/// must be released by calling the $@Shared::Release@$ function.
+	///
+	/// \also	$@AutoRelease@$
 
 
-	//# \function	Shared::GetReferenceCount		Returns an object's current reference count.
-	//
-	//# \proto		int32 GetReferenceCount(void) const;
-	//
-	//# \desc
-	//# The $GetReferenceCount$ function returns the current reference count.
-	//# When a shared object is constructed, its initial reference count is 1.
-	//
-	//# \also		$@Shared::Retain@$
-	//# \also		$@Shared::Release@$
+	/// \function	Shared::GetReferenceCount		Returns an object's current reference count.
+	///
+	/// \proto		int32 GetReferenceCount(void) const;
+	///
+	/// \desc
+	/// The $GetReferenceCount$ function returns the current reference count.
+	/// When a shared object is constructed, its initial reference count is 1.
+	///
+	/// \also		$@Shared::Retain@$
+	/// \also		$@Shared::Release@$
 
 
-	//# \function	Shared::Retain		Increments an object's reference count.
-	//
-	//# \proto		int32 Retain(void);
-	//
-	//# \desc
-	//# The $Retain$ function increments the reference count. For each call to $Retain$
-	//# made for a particular shared object, a balancing call to $@Shared::Release@$
-	//# decrements the reference count without destroying the object. The return value
-	//# of the $Retain$ function is the new reference count.
-	//
-	//# \also		$@Shared::GetReferenceCount@$
-	//# \also		$@Shared::Release@$
+	/// \function	Shared::Retain		Increments an object's reference count.
+	///
+	/// \proto		int32 Retain(void);
+	///
+	/// \desc
+	/// The $Retain$ function increments the reference count. For each call to $Retain$
+	/// made for a particular shared object, a balancing call to $@Shared::Release@$
+	/// decrements the reference count without destroying the object. The return value
+	/// of the $Retain$ function is the new reference count.
+	///
+	/// \also		$@Shared::GetReferenceCount@$
+	/// \also		$@Shared::Release@$
 
 
-	//# \function	Shared::Release		Decrements an object's reference count.
-	//
-	//# \proto		virtual int32 Release(void);
-	//
-	//# \desc
-	//# The $Release$ function decrements the reference count. If the reference count
-	//# becomes zero, then the object is destroyed. The return value of the $Release$
-	//# function is the new reference count.
-	//
-	//# \also		$@Shared::GetReferenceCount@$
-	//# \also		$@Shared::Retain@$
+	/// \function	Shared::Release		Decrements an object's reference count.
+	///
+	/// \proto		virtual int32 Release(void);
+	///
+	/// \desc
+	/// The $Release$ function decrements the reference count. If the reference count
+	/// becomes zero, then the object is destroyed. The return value of the $Release$
+	/// function is the new reference count.
+	///
+	/// \also		$@Shared::GetReferenceCount@$
+	/// \also		$@Shared::Retain@$
 
 
 	class Shared
@@ -457,29 +457,29 @@ namespace Terathon
 	};
 
 
-	//# \class	AutoRelease		A helper class the wraps a pointer to a shared object.
-	//
-	//# \def	template <class type> class AutoRelease
-	//
-	//# \tparam	type	The type of object to which the $AutoRelease$ object refers.
-	//
-	//# \ctor	explicit AutoRelease(type *ptr);
-	//
-	//# \param	ptr		A pointer to the shared object that is wrapped by the $AutoRelease$ object.
-	//
-	//# \desc
-	//# The $AutoRelease$ class template is a helper class that wraps a pointer to a shared
-	//# object. When an $AutoRelease$ object is destroyed (usually by going out of scope),
-	//# the $Release$ function is automatically called for the object that was passed into
-	//# the $ptr$ parameter when the $AutoRelease$ object was constructed.
-	//#
-	//# An $AutoRelease$ object behaves like a pointer to an object of the type given by the
-	//# $type$ template parameter. An $AutoRelease$ object can be passed as a function parameter
-	//# wherever a pointer to $type$ is expected, and the $->$ operator can be used to access
-	//# members of the object that the $AutoRelease$ object wraps.
-	//
-	//# \also	$@Shared@$
-	//# \also	$@Holder@$
+	/// \class	AutoRelease		A helper class the wraps a pointer to a shared object.
+	///
+	/// \def	template <class type> class AutoRelease
+	///
+	/// \tparam	type	The type of object to which the $AutoRelease$ object refers.
+	///
+	/// \ctor	explicit AutoRelease(type *ptr);
+	///
+	/// \param	ptr		A pointer to the shared object that is wrapped by the $AutoRelease$ object.
+	///
+	/// \desc
+	/// The $AutoRelease$ class template is a helper class that wraps a pointer to a shared
+	/// object. When an $AutoRelease$ object is destroyed (usually by going out of scope),
+	/// the $Release$ function is automatically called for the object that was passed into
+	/// the $ptr$ parameter when the $AutoRelease$ object was constructed.
+	///
+	/// An $AutoRelease$ object behaves like a pointer to an object of the type given by the
+	/// $type$ template parameter. An $AutoRelease$ object can be passed as a function parameter
+	/// wherever a pointer to $type$ is expected, and the $->$ operator can be used to access
+	/// members of the object that the $AutoRelease$ object wraps.
+	///
+	/// \also	$@Shared@$
+	/// \also	$@Holder@$
 
 
 	template <class type>
